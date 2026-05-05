@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offboarding Checker</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Offboarding — Vérification & Désactivation</h1>
+    </header>
+
+    <main class="container">
+      <div id="alert" class="alert" hidden></div>
+      <div class="layout-shell">
+        <aside class="sidebar">
+          <div class="sidebar-panel">
+            <div class="sidebar-title">Suivi</div>
+            <button class="sidebar-btn active" data-view="pending">Tableau de complément</button>
+            <button class="sidebar-btn" data-view="completed">Tableau déjà fait</button>
+            <button class="sidebar-btn" data-view="all">Tout voir</button>
+          </div>
+          <div class="sidebar-panel stats-panel">
+            <div class="stat">
+              <span class="stat-label">À faire</span>
+              <strong id="count-pending">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Déjà fait</span>
+              <strong id="count-completed">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total</span>
+              <strong id="count-total">0</strong>
+            </div>
+          </div>
+        </aside>
+
+        <section class="content-panel">
+          <div id="table-wrap"></div>
+        </section>
+      </div>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

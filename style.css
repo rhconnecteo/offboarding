@@ -201,16 +201,17 @@ body {
   text-align: left;
   font-size: 0.72rem;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: lowercase;
   letter-spacing: 0.5px;
   color: var(--primary);
   white-space: normal;
   line-height: 1.2;
+  border: 1px solid var(--border);
 }
 
 .table td {
   padding: 0.7rem 0.55rem;
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
   font-size: 0.74rem;
   vertical-align: top;
   white-space: normal;
@@ -277,6 +278,12 @@ body {
   box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
 }
 
+.btn-check.btn-check-ready {
+  background: linear-gradient(135deg, #10B981, #059669); /* green gradient */
+  box-shadow: 0 6px 18px rgba(16,185,129,0.22);
+  color: #002;
+}
+
 .btn-check:active {
   transform: translateY(0);
 }
@@ -309,8 +316,46 @@ body {
   display: flex;
   gap: 0.45rem;
   align-items: center;
+  justify-content: center;
   padding: 0.7rem 0.55rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-height: 100%;
+}
+
+.table td .action-cell {
+  width: 100%;
+}
+
+.action-cell .btn-check {
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  line-height: 1;
+  border-radius: 999px;
+}
+
+.action-cell .btn-check[disabled] {
+  opacity: 0.9;
+}
+
+.ready-bubble {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #34D399, #059669);
+  box-shadow: 0 2px 6px rgba(5,150,105,0.25);
+  margin-left: 6px;
+  align-self: center;
+}
+
+.action-cell .row-checkbox {
+  margin: 0;
+  box-shadow: none;
 }
 
 /* Footer */

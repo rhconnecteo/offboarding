@@ -63,6 +63,14 @@ function previewCheckboxState(checkbox, rowNumber){
       confirmButton.classList.add('btn-check-ready');
       confirmButton.disabled = false;
     }
+    // add a small badge bubble next to the button to indicate 'ready'
+    const actionWrapper = row.querySelector('.action-cell');
+    if (actionWrapper && !actionWrapper.querySelector('.ready-bubble')) {
+      const bubble = document.createElement('span');
+      bubble.className = 'ready-bubble';
+      bubble.setAttribute('aria-hidden', 'true');
+      actionWrapper.appendChild(bubble);
+    }
   } else {
     if (dateCell) {
       dateCell.textContent = '';
@@ -70,6 +78,11 @@ function previewCheckboxState(checkbox, rowNumber){
     if (confirmButton) {
       confirmButton.classList.remove('btn-check-ready');
       confirmButton.disabled = true;
+    }
+    const actionWrapper = row.querySelector('.action-cell');
+    if (actionWrapper) {
+      const b = actionWrapper.querySelector('.ready-bubble');
+      if (b) b.remove();
     }
   }
 
@@ -83,27 +96,31 @@ function setConfirmButtonState(row, state){
 
   if (state === 'saving') {
     confirmButton.disabled = true;
-    confirmButton.textContent = 'Confirmation...';
+    confirmButton.textContent = '⏳';
+    confirmButton.title = 'Enregistrement en cours';
     confirmButton.classList.add('btn-check-ready');
     return;
   }
 
   if (state === 'confirmed') {
     confirmButton.disabled = true;
-    confirmButton.textContent = 'Confirmé';
+    confirmButton.textContent = '✓';
+    confirmButton.title = 'Validé';
     confirmButton.classList.add('btn-check-ready');
     return;
   }
 
   if (state === 'ready') {
     confirmButton.disabled = false;
-    confirmButton.textContent = 'Confirmer';
+    confirmButton.textContent = '✓';
+    confirmButton.title = 'Valider';
     confirmButton.classList.add('btn-check-ready');
     return;
   }
 
   confirmButton.disabled = true;
-  confirmButton.textContent = 'Confirmer';
+  confirmButton.textContent = '✓';
+  confirmButton.title = 'Valider';
   confirmButton.classList.remove('btn-check-ready');
 }
 
@@ -169,7 +186,7 @@ function renderTable(rows){
     
     // Colonne Action: checkbox + bouton
     const checkboxHtml = `<input type="checkbox" class="row-checkbox" ${isChecked ? 'checked disabled' : ''} onchange="handleCheckboxChange(this, ${r._rowNumber})">`;
-    const action = `<td class="action-cell">${checkboxHtml} <button class="btn-check" disabled onclick="markChecked(${r._rowNumber})">Confirmer</button></td>`;
+    const action = `<td><div class="action-cell">${checkboxHtml} <button class="btn-check" disabled title="Valider" aria-label="Valider" onclick="markChecked(${r._rowNumber})">✓</button></div></td>`;
     
     return `<tr class="${rowClass}" data-row-number="${r._rowNumber}">${cells}${action}</tr>`;
   }).join('');
@@ -231,7 +248,6 @@ function handleCheckboxChange(checkbox, rowNumber){
   if (checkbox.checked) {
     previewCheckboxState(checkbox, rowNumber);
     setConfirmButtonState(row, 'ready');
-    showAlert('Date prête, cliquez sur Confirmer pour enregistrer', 'success');
   } else {
     previewCheckboxState(checkbox, rowNumber);
     setConfirmButtonState(row, 'idle');

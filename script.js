@@ -186,7 +186,7 @@ function renderTable(rows){
     
     // Colonne Action: checkbox + bouton
     const checkboxHtml = `<input type="checkbox" class="row-checkbox" ${isChecked ? 'checked disabled' : ''} onchange="handleCheckboxChange(this, ${r._rowNumber})">`;
-    const action = `<td><div class="action-cell">${checkboxHtml} <button class="btn-check" disabled title="Valider" aria-label="Valider" onclick="markChecked(${r._rowNumber})">✓</button></div></td>`;
+    const action = `<td><div class="action-cell">${checkboxHtml} <button class="btn-check" disabled title="Valider" aria-label="Valider" onclick="markChecked(event, ${r._rowNumber})">✓</button></div></td>`;
     
     return `<tr class="${rowClass}" data-row-number="${r._rowNumber}">${cells}${action}</tr>`;
   }).join('');
@@ -196,7 +196,13 @@ function renderTable(rows){
   wrap.innerHTML = html;
 }
 
-async function markChecked(rowNumber){
+async function markChecked(evt, rowNumber){
+  const source = evt && evt.currentTarget ? evt.currentTarget : null;
+  if (!source || !source.classList || !source.classList.contains('btn-check')) {
+    console.warn('markChecked ignoré: appel hors bouton de validation');
+    return;
+  }
+
   console.log('✔️ markChecked appelé pour ligne', rowNumber);
   try {
     const row = document.querySelector(`tr[data-row-number="${rowNumber}"]`);
@@ -228,7 +234,12 @@ async function markChecked(rowNumber){
         row.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
         row.style.opacity = '0';
         row.style.transform = 'translateY(-4px)';
-        setTimeout(() => row.remove(), 220);
+        setTimeout(() => {
+          row.remove();
+          loadRows();
+        }, 220);
+      } else {
+        loadRows();
       }
     } else {
       setConfirmButtonState(row, 'ready');
